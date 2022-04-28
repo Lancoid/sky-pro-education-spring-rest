@@ -1,17 +1,15 @@
 package ru.hogwarts.school.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
+@EqualsAndHashCode
 public class Student {
 
-    private final Long id = null;
-    private final String name;
-    private final int age;
-
-    public Student(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
+    private Long id;
+    private String name;
+    private int age;
 }

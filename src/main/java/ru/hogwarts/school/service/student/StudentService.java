@@ -8,12 +8,12 @@ public interface StudentService {
 
     Student create(Student student);
 
-    Student getById(Long facultyId);
+    Student getById(Long id);
 
     List<Student> getByAge(int age);
 
-    Student update(Long facultyId, Student student);
+    Student update(Student student);
 
-    Student delete(Long facultyId);
+    Student delete(Long id);
 
 }

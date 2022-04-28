@@ -8,12 +8,12 @@ public interface FacultyService {
 
     Faculty create(Faculty faculty);
 
-    Faculty getById(Long facultyId);
+    Faculty getById(Long id);
 
     List<Faculty> getByColor(String color);
 
-    Faculty update(Long facultyId, Faculty faculty);
+    Faculty update(Faculty faculty);
 
-    Faculty delete(Long facultyId);
+    Faculty delete(Long id);
 
 }
