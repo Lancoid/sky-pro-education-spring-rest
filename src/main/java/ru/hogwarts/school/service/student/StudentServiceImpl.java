@@ -4,44 +4,40 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.NotFoundException;
 import ru.hogwarts.school.exception.ValidatorException;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private final Map<Long, Student> studentMap = new HashMap<>();
+    private final StudentRepository studentRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student create(Student student) {
-        if (student.getId() <= 0) {
-            throw new ValidatorException("id у студенты должен быть строго положительным");
-        }
-        if (studentMap.containsKey(student.getId())) {
-            throw new ValidatorException("Студент с таким id уже добавлен");
+        if (studentRepository.existsByNameEqualsIgnoreCaseAndAgeEquals(student.getName(), student.getAge())) {
+            throw new ValidatorException("Студент уже добавлен");
         }
 
-        return studentMap.put(student.getId(), student);
+        return studentRepository.save(student);
     }
 
     @Override
     public Student getById(Long id) {
-        if (!studentMap.containsKey(id)) {
+        if (studentRepository.existsById(id)) {
             throw new NotFoundException("Студент с таким id не найден");
         }
 
-        return studentMap.get(id);
+        return studentRepository.getById(id);
     }
 
     @Override
     public List<Student> getByAge(int age) {
-        List<Student> result = studentMap.values()
-                .stream()
-                .filter(faculty -> faculty.getAge() == age)
-                .collect(Collectors.toList());
+        List<Student> result = studentRepository.findByAgeEquals(age);
 
         if (result.size() == 0) {
             throw new NotFoundException("Студенты с таким age не найдены");
@@ -52,20 +48,24 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student update(Student student) {
-        if (!studentMap.containsKey(student.getId())) {
-            throw new NotFoundException("Студент не найден");
+        if (studentRepository.existsById(student.getId())) {
+            throw new NotFoundException("Студент с таким id не найден");
         }
 
-        return studentMap.put(student.getId(), student);
+        if (studentRepository.existsByNameEqualsIgnoreCaseAndAgeEqualsAndIdNot(student.getName(), student.getAge(), student.getId())) {
+            throw new ValidatorException("Студент уже добавлен c другим id");
+        }
+
+        return studentRepository.save(student);
     }
 
     @Override
     public Student delete(Long id) {
-        if (!studentMap.containsKey(id)) {
-            throw new NotFoundException("Студент с таким id не найден");
-        }
+        Student student = getById(id);
 
-        return studentMap.remove(id);
+        studentRepository.deleteById(id);
+
+        return student;
     }
 
 }
