@@ -10,7 +10,11 @@ public interface FacultyService {
 
     Faculty getById(Long id);
 
+    List<Faculty> getAll();
+
     List<Faculty> getByColor(String color);
+
+    List<Faculty> getByColorOrName(String color, String name);
 
     Faculty update(Faculty faculty);
 
