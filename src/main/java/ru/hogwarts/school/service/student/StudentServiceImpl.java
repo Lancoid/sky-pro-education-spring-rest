@@ -3,6 +3,7 @@ package ru.hogwarts.school.service.student;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.NotFoundException;
 import ru.hogwarts.school.exception.ValidatorException;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
@@ -28,7 +29,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getById(Long id) {
-        if (studentRepository.existsById(id)) {
+        if (!studentRepository.existsById(id)) {
             throw new NotFoundException("Студент с таким id не найден");
         }
 
@@ -36,11 +37,38 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> getAll() {
+        List<Student> result = studentRepository.findAll();
+
+        if (result.size() == 0) {
+            throw new NotFoundException("Студенты не найдены");
+        }
+
+        return result;
+    }
+
+
+    @Override
     public List<Student> getByAge(int age) {
         List<Student> result = studentRepository.findByAgeEquals(age);
 
         if (result.size() == 0) {
             throw new NotFoundException("Студенты с таким age не найдены");
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Student> getByAgeBetween(int minAge, int maxAge) {
+        if (minAge > maxAge) {
+            throw new ValidatorException("Минимальный порог возраста должен быть меньше максимального");
+        }
+
+        List<Student> result = studentRepository.findByAgeBetween(minAge, maxAge);
+
+        if (result.size() == 0) {
+            throw new NotFoundException("Студенты с таким диапазоном age не найдены");
         }
 
         return result;
@@ -66,6 +94,13 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteById(id);
 
         return student;
+    }
+
+    @Override
+    public Faculty getFacultyById(Long id) {
+        Student student = getById(id);
+
+        return student.getFaculty();
     }
 
 }

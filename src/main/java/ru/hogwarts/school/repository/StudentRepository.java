@@ -13,4 +13,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByNameEqualsIgnoreCaseAndAgeEqualsAndIdNot(@NonNull String name, int age, Long id);
 
     List<Student> findByAgeEquals(int age);
+
+    List<Student> findByAgeBetween(int minAge, int maxAge);
 }

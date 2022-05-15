@@ -28,7 +28,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Faculty getById(Long id) {
-        if (facultyRepository.existsById(id)) {
+        if (!facultyRepository.existsById(id)) {
             throw new NotFoundException("Факультет с таким id не найден");
         }
 
@@ -36,8 +36,35 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
+    public List<Faculty> getAll() {
+        List<Faculty> result = facultyRepository.findAll();
+
+        if (result.size() == 0) {
+            throw new NotFoundException("Факультеты не найдены");
+        }
+
+        return result;
+    }
+
+
+    @Override
     public List<Faculty> getByColor(String color) {
         List<Faculty> result = facultyRepository.findByColorEqualsIgnoreCase(color);
+
+        if (result.size() == 0) {
+            throw new NotFoundException("Факультеты с таким color не найдены");
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Faculty> getByColorOrName(String color, String name) {
+        if (color.isEmpty() && name.isEmpty()) {
+            throw new ValidatorException("Пустые параметры запроса");
+        }
+
+        List<Faculty> result = facultyRepository.findByColorEqualsIgnoreCaseOrNameEqualsIgnoreCase(color, name);
 
         if (result.size() == 0) {
             throw new NotFoundException("Факультеты с таким color не найдены");
