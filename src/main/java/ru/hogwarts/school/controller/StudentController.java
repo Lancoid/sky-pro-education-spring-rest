@@ -107,4 +107,15 @@ public class StudentController {
         return ResponseEntity.ok(studentService.update(student));
     }
 
+    @DeleteMapping
+    @Operation(summary = "delete",
+            description = "delete existed Student",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Student.class))),
+                    @ApiResponse(responseCode = "404", description = "Студент не найден"),
+            })
+    public ResponseEntity<Student> delete(@RequestParam(value = "id") Long id) {
+        return ResponseEntity.ok(studentService.delete(id));
+    }
+
 }

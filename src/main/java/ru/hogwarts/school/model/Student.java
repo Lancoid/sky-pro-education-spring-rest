@@ -1,8 +1,9 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Entity
+@NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Student {
 
@@ -21,7 +23,12 @@ public class Student {
 
     @ManyToOne()
     @JoinColumn(name = "faculty_id")
-    @JsonBackReference
+    @JsonProperty
     private Faculty faculty;
 
+    public Student(String name, int age, Faculty faculty) {
+        this.name = name;
+        this.age = age;
+        this.faculty = faculty;
+    }
 }
