@@ -38,4 +38,5 @@ public class Faculty {
         this.name = name;
         this.color = color;
     }
+
 }

@@ -1,5 +1,6 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -25,6 +26,11 @@ public class Student {
     @JoinColumn(name = "faculty_id")
     @JsonProperty
     private Faculty faculty;
+
+    @OneToOne(mappedBy = "student")
+    @PrimaryKeyJoinColumn
+    @JsonBackReference
+    private Avatar avatar;
 
     public Student(String name, int age, Faculty faculty) {
         this.name = name;
