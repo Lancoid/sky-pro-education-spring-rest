@@ -12,12 +12,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.hogwarts.school.controller.AvatarController;
 import ru.hogwarts.school.controller.FacultyController;
 import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
+import ru.hogwarts.school.service.avatar.AvatarServiceImpl;
 import ru.hogwarts.school.service.faculty.FacultyServiceImpl;
 import ru.hogwarts.school.service.student.StudentServiceImpl;
 
@@ -44,17 +47,26 @@ class FacultyControllerTests {
     @MockBean
     private StudentRepository studentRepository;
 
+    @MockBean
+    private AvatarRepository avatarRepository;
+
     @SpyBean
     private FacultyServiceImpl facultyService;
 
     @SpyBean
     private StudentServiceImpl studentService;
 
+    @SpyBean
+    private AvatarServiceImpl avatarService;
+
     @InjectMocks
     private FacultyController facultyController;
 
     @InjectMocks
     private StudentController studentController;
+
+    @InjectMocks
+    private AvatarController avatarController;
 
     @Test
     public void saveFacultyCreateTest() throws Exception {
