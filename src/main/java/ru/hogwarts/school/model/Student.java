@@ -24,4 +24,9 @@ public class Student {
     @JsonBackReference
     private Faculty faculty;
 
+    @OneToOne(mappedBy = "student")
+    @PrimaryKeyJoinColumn
+    @JsonBackReference
+    private Avatar avatar;
+
 }
