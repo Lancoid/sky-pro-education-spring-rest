@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Setter
 @Getter
@@ -36,5 +37,24 @@ public class Student {
         this.name = name;
         this.age = age;
         this.faculty = faculty;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Student)) {
+            return false;
+        }
+
+        Student student = (Student) o;
+
+        return age == student.age && id.equals(student.id) && name.equals(student.name) && faculty.equals(student.faculty) && avatar.equals(student.avatar);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, age, faculty, avatar);
     }
 }
