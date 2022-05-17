@@ -76,7 +76,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student update(Student student) {
-        if (studentRepository.existsById(student.getId())) {
+        if (!studentRepository.existsById(student.getId())) {
             throw new NotFoundException("Студент с таким id не найден");
         }
 
