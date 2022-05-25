@@ -75,6 +75,31 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> getLastStudents(int count) {
+        if (count < 1) {
+            throw new ValidatorException("Количество должно быть больше 1");
+        }
+
+        List<Student> result = studentRepository.getLastStudents(count);
+
+        if (result.size() == 0) {
+            throw new NotFoundException("Студенты не найдены");
+        }
+
+        return result;
+    }
+
+    @Override
+    public int getStudentsCount() {
+        return studentRepository.getStudentsCount();
+    }
+
+    @Override
+    public int getStudentsAverageAge() {
+        return studentRepository.getStudentsAverageAge();
+    }
+
+    @Override
     public Student update(Student student) {
         if (!studentRepository.existsById(student.getId())) {
             throw new NotFoundException("Студент с таким id не найден");
