@@ -1,6 +1,10 @@
 package ru.hogwarts.school.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -8,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.avatar.AvatarService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 @RequestMapping("/avatar")
@@ -61,6 +67,22 @@ public class AvatarController {
         headers.setContentLength(avatar.getData().length);
 
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(avatar.getData());
+    }
+
+    @GetMapping()
+    @Operation(summary = "getAll",
+            description = "Get all Students",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Student.class)))),
+                    @ApiResponse(responseCode = "404", description = "Студенты не найдены"),
+            })
+    public ResponseEntity<List<Avatar>> getAll(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "limit") int limit
+    ) {
+        List<Avatar> list = avatarService.findAll(page, limit);
+
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
 }

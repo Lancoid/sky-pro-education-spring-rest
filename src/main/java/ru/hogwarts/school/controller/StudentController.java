@@ -34,6 +34,28 @@ public class StudentController {
         return ResponseEntity.ok(studentService.create(student));
     }
 
+    @PutMapping
+    @Operation(summary = "update",
+            description = "Update existed Student",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Student.class))),
+                    @ApiResponse(responseCode = "404", description = "Студент не найден"),
+            })
+    public ResponseEntity<Student> update(@RequestBody Student student) {
+        return ResponseEntity.ok(studentService.update(student));
+    }
+
+    @DeleteMapping
+    @Operation(summary = "delete",
+            description = "delete existed Student",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Student.class))),
+                    @ApiResponse(responseCode = "404", description = "Студент не найден"),
+            })
+    public ResponseEntity<Student> delete(@RequestParam(value = "id") Long id) {
+        return ResponseEntity.ok(studentService.delete(id));
+    }
+
     @GetMapping()
     @Operation(summary = "getAll",
             description = "Get all Students",
@@ -96,26 +118,38 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getById(id).getFaculty());
     }
 
-    @PutMapping
-    @Operation(summary = "update",
-            description = "Update existed Student",
+    @GetMapping(path = "getCount")
+    @Operation(summary = "getCount",
+            description = "Get student's count",
             responses = {
-                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Student.class))),
-                    @ApiResponse(responseCode = "404", description = "Студент не найден"),
+                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Integer.class)))
             })
-    public ResponseEntity<Student> update(@RequestBody Student student) {
-        return ResponseEntity.ok(studentService.update(student));
+    public ResponseEntity<Integer> getCount() {
+        return ResponseEntity.ok(studentService.getStudentsCount());
     }
 
-    @DeleteMapping
-    @Operation(summary = "delete",
-            description = "delete existed Student",
+    @GetMapping(path = "getAverageAge")
+    @Operation(summary = "getAverageAge",
+            description = "Get student's average age",
             responses = {
-                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Student.class))),
-                    @ApiResponse(responseCode = "404", description = "Студент не найден"),
+                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Integer.class)))
             })
-    public ResponseEntity<Student> delete(@RequestParam(value = "id") Long id) {
-        return ResponseEntity.ok(studentService.delete(id));
+    public ResponseEntity<Integer> getAverageAge() {
+        return ResponseEntity.ok(studentService.getStudentsAverageAge());
+    }
+
+    @GetMapping(path = "getLastStudents")
+    @Operation(summary = "getLastStudents",
+            description = "Get last Students by count",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Student.class)))),
+                    @ApiResponse(responseCode = "400", description = "Параметры запроса неправильные"),
+                    @ApiResponse(responseCode = "404", description = "Студенты не найдены"),
+            })
+    public ResponseEntity<List<Student>> getLastStudents(
+            @RequestParam(value = "count") int count
+    ) {
+        return ResponseEntity.ok(studentService.getLastStudents(count));
     }
 
 }
