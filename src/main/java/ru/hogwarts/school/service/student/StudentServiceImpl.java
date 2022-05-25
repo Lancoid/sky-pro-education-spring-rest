@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service.student;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.NotFoundException;
 import ru.hogwarts.school.exception.ValidatorException;
@@ -13,6 +15,7 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
+    Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -20,6 +23,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student create(Student student) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->create");
+
         if (studentRepository.existsByNameEqualsIgnoreCaseAndAgeEquals(student.getName(), student.getAge())) {
             throw new ValidatorException("Студент уже добавлен");
         }
@@ -29,6 +34,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getById(Long id) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getById");
+
         if (!studentRepository.existsById(id)) {
             throw new NotFoundException("Студент с таким id не найден");
         }
@@ -38,6 +45,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAll() {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getAll");
+
         List<Student> result = studentRepository.findAll();
 
         if (result.size() == 0) {
@@ -50,6 +59,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getByAge(int age) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getByAge");
+
         List<Student> result = studentRepository.findByAgeEquals(age);
 
         if (result.size() == 0) {
@@ -61,6 +72,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getByAgeBetween(int minAge, int maxAge) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getByAgeBetween");
+
         if (minAge > maxAge) {
             throw new ValidatorException("Минимальный порог возраста должен быть меньше максимального");
         }
@@ -76,6 +89,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getLastStudents(int count) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getLastStudents");
+
         if (count < 1) {
             throw new ValidatorException("Количество должно быть больше 1");
         }
@@ -91,16 +106,22 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public int getStudentsCount() {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getStudentsCount");
+
         return studentRepository.getStudentsCount();
     }
 
     @Override
     public int getStudentsAverageAge() {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getStudentsAverageAge");
+
         return studentRepository.getStudentsAverageAge();
     }
 
     @Override
     public Student update(Student student) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->update");
+
         if (!studentRepository.existsById(student.getId())) {
             throw new NotFoundException("Студент с таким id не найден");
         }
@@ -114,6 +135,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student delete(Long id) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->delete");
+
         Student student = getById(id);
 
         studentRepository.deleteById(id);
@@ -123,6 +146,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Faculty getFacultyById(Long id) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getFacultyById");
+
         Student student = getById(id);
 
         return student.getFaculty();
