@@ -10,7 +10,7 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder()
-                .profiles("test")
+                .profiles("dev")
                 .sources(DemoApplication.class)
                 .run(args);
     }
