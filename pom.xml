@@ -61,6 +61,13 @@
             <version>42.3.4</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.11.0</version>
+        </dependency>
+
         <!-- JUNIT 5 Dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
