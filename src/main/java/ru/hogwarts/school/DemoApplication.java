@@ -1,18 +1,15 @@
 package ru.hogwarts.school;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 @OpenAPIDefinition
 public class DemoApplication {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder()
-                .profiles("dev")
-                .sources(DemoApplication.class)
-                .run(args);
+        SpringApplication.run(DemoApplication.class, args);
     }
 
 }
