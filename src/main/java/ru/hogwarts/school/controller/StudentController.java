@@ -67,6 +67,28 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getAll());
     }
 
+    @GetMapping(path = "getAllByTwoParalleledStreams")
+    @Operation(summary = "getAllByTwoParalleledStreams",
+            description = "Get all Students by two paralleled streams",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Student.class)))),
+                    @ApiResponse(responseCode = "404", description = "Студенты не найдены"),
+            })
+    public ResponseEntity<List<Student>> getAllByTwoParallelStreams() {
+        return ResponseEntity.ok(studentService.getAllByTwoParalleledStreams());
+    }
+
+    @GetMapping(path = "getAllByTwoSynchronizedStreams")
+    @Operation(summary = "getAllByTwoSynchronizedStreams",
+            description = "Get all Students by two synchronized streams",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Student.class)))),
+                    @ApiResponse(responseCode = "404", description = "Студенты не найдены"),
+            })
+    public ResponseEntity<List<Student>> getAllByTwoSynchronizedStreams() {
+        return ResponseEntity.ok(studentService.getAllByTwoSynchronizedStreams());
+    }
+
     @GetMapping(path = "byId")
     @Operation(summary = "getById",
             description = "Get Student by id",
