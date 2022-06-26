@@ -107,6 +107,20 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getByAgeBetween(minAge, maxAge));
     }
 
+    @GetMapping(path = "byFirstLetter")
+    @Operation(summary = "getByFirstLetter",
+            description = "Get Students names by first letter",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))),
+                    @ApiResponse(responseCode = "400", description = "Параметры запроса неправильные"),
+                    @ApiResponse(responseCode = "404", description = "Имена не найдены"),
+            })
+    public ResponseEntity<List<String>> getByFirstLetter(
+            @RequestParam(value = "firstLetter") char firstLetter
+    ) {
+        return ResponseEntity.ok(studentService.getByFirstLetter(firstLetter));
+    }
+
     @GetMapping(path = "getFaculty")
     @Operation(summary = "getFaculty",
             description = "Get student's faculty",
@@ -132,9 +146,9 @@ public class StudentController {
     @Operation(summary = "getAverageAge",
             description = "Get student's average age",
             responses = {
-                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Integer.class)))
+                    @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Float.class)))
             })
-    public ResponseEntity<Integer> getAverageAge() {
+    public ResponseEntity<Float> getAverageAge() {
         return ResponseEntity.ok(studentService.getStudentsAverageAge());
     }
 

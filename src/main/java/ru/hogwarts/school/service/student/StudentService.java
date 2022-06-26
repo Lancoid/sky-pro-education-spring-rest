@@ -17,11 +17,13 @@ public interface StudentService {
 
     List<Student> getByAgeBetween(int minAge, int maxAge);
 
+    List<String> getByFirstLetter(char firstLetter);
+
     List<Student> getLastStudents(int count);
 
     int getStudentsCount();
 
-    int getStudentsAverageAge();
+    float getStudentsAverageAge();
 
     Student update(Student student);
 
