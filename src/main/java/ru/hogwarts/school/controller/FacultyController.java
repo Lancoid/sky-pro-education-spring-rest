@@ -57,6 +57,17 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.getById(id));
     }
 
+    @GetMapping(path = "byLongerName")
+    @Operation(summary = "getByLongerName",
+            description = "Get one Faculty by longer name",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/text", schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "404", description = "Факультет не найден"),
+            })
+    public ResponseEntity<String> getByLongerName() {
+        return ResponseEntity.ok(facultyService.getByLongerName());
+    }
+
     @GetMapping(path = "byColor")
     @Operation(summary = "getByColor",
             description = "Get Faculties by color",

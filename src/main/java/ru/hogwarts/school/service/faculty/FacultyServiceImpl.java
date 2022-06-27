@@ -8,7 +8,9 @@ import ru.hogwarts.school.exception.ValidatorException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
@@ -84,6 +86,16 @@ public class FacultyServiceImpl implements FacultyService {
         }
 
         return result;
+    }
+
+    public String getByLongerName() {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getByLongerName");
+
+        return facultyRepository.findAll()
+                .stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElseThrow(NoSuchElementException::new);
     }
 
     @Override

@@ -10,6 +10,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -165,6 +166,18 @@ public class StudentServiceImpl implements StudentService {
         return result;
     }
 
+    public List<String> getByFirstLetter(char firstLetter) {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getByFirstLetter");
+
+        return studentRepository.findAll()
+                .stream()
+                .map(Student::getName)
+                .filter(name -> name.startsWith(String.valueOf(firstLetter)))
+                .map(String::toUpperCase)
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<Student> getLastStudents(int count) {
         logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getLastStudents");
@@ -190,10 +203,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public int getStudentsAverageAge() {
+    public float getStudentsAverageAge() {
         logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getStudentsAverageAge");
 
-        return studentRepository.getStudentsAverageAge();
+        return (float) studentRepository.findAll()
+                .stream()
+                .mapToDouble(Student::getAge)
+                .average()
+                .orElse(Float.NaN);
     }
 
     @Override
