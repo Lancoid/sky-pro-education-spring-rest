@@ -13,6 +13,10 @@ public interface StudentService {
 
     List<Student> getAll();
 
+    List<Student> getAllByTwoParalleledStreams();
+
+    List<Student> getAllByTwoSynchronizedStreams();
+
     List<Student> getByAge(int age);
 
     List<Student> getByAgeBetween(int minAge, int maxAge);

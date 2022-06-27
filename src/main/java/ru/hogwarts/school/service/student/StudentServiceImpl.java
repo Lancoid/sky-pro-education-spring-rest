@@ -56,6 +56,84 @@ public class StudentServiceImpl implements StudentService {
         return result;
     }
 
+    @Override
+    public List<Student> getAllByTwoParalleledStreams() {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getAllByTwoParalleledStreams");
+
+        List<Student> result = studentRepository.findAll();
+
+        if (result.size() < 6) {
+            throw new NotFoundException("Студенты не найдены");
+        }
+
+        Runnable taskFirst = () -> {
+            String threadName = Thread.currentThread().getName();
+            System.out.println(threadName + " : " + result.get(0).getName());
+            System.out.println(threadName + " : " + result.get(1).getName());
+        };
+
+        Runnable taskSecond = () -> {
+            String threadName = Thread.currentThread().getName();
+            System.out.println(threadName + " : " + result.get(1).getName());
+            System.out.println(threadName + " : " + result.get(2).getName());
+        };
+
+        Runnable taskThird = () -> {
+            String threadName = Thread.currentThread().getName();
+            System.out.println(threadName + " : " + result.get(4).getName());
+            System.out.println(threadName + " : " + result.get(5).getName());
+        };
+
+        (new Thread(taskFirst)).start();
+        (new Thread(taskSecond)).start();
+        (new Thread(taskThird)).start();
+
+        return result;
+    }
+
+    @Override
+    public List<Student> getAllByTwoSynchronizedStreams() {
+        logger.info("Был вызван метод: " + this.getClass().getSimpleName() + "->getAllByTwoSynchronizedStreams");
+
+        List<Student> result = studentRepository.findAll();
+
+        if (result.size() < 6) {
+            throw new NotFoundException("Студенты не найдены");
+        }
+
+        Object lock = new Object();
+
+        Runnable taskFirst = () -> {
+            synchronized (lock) {
+                String threadName = Thread.currentThread().getName();
+                System.out.println(threadName + " : " + result.get(0).getName());
+                System.out.println(threadName + " : " + result.get(1).getName());
+            }
+        };
+
+        Runnable taskSecond = () -> {
+            synchronized (lock) {
+                String threadName = Thread.currentThread().getName();
+                System.out.println(threadName + " : " + result.get(1).getName());
+                System.out.println(threadName + " : " + result.get(2).getName());
+            }
+        };
+
+        Runnable taskThird = () -> {
+            synchronized (lock) {
+                String threadName = Thread.currentThread().getName();
+                System.out.println(threadName + " : " + result.get(4).getName());
+                System.out.println(threadName + " : " + result.get(5).getName());
+            }
+        };
+
+        (new Thread(taskFirst)).start();
+        (new Thread(taskSecond)).start();
+        (new Thread(taskThird)).start();
+
+        return result;
+    }
+
 
     @Override
     public List<Student> getByAge(int age) {
